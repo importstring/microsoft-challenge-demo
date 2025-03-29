@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  query-processor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: microsoft-query-processor:latest
+    container_name: microsoft-query-processor
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/app/logs
+      - ./cache:/app/cache
+      - ./config:/app/config
+    environment:
+      - AZURE_STORAGE_CONNECTION_STRING=${AZURE_STORAGE_CONNECTION_STRING}
+      - ANOMALY_DETECTOR_ENDPOINT=${ANOMALY_DETECTOR_ENDPOINT}
+      - ANOMALY_DETECTOR_KEY=${ANOMALY_DETECTOR_KEY}
+      - LOG_ANALYTICS_WORKSPACE_ID=${LOG_ANALYTICS_WORKSPACE_ID}
+      - MS365_CLIENT_ID=${MS365_CLIENT_ID}
+      - MS365_CLIENT_SECRET=${MS365_CLIENT_SECRET}
+      - MS365_TENANT_ID=${MS365_TENANT_ID}
+    command: ["--config", "/app/config/production.json", "--azure"]
+    restart: unless-stopped
+    networks:
+      - query-processor-network
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - query-processor-network
+
+networks:
+  query-processor-network:
+    driver: bridge
+
+volumes:
+  ollama-data:

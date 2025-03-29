@@ -1,0 +1,54 @@
+{
+  "feature_extraction": {
+    "max_features": 100,
+    "stop_words": "english"
+  },
+  "anomaly_detection": {
+    "contamination": 0.05,
+    "n_estimators": 200
+  },
+  "models": {
+    "simple": {
+      "model": "mistral",
+      "threshold": 0.3,
+      "min_complexity": 0,
+      "resource_intensity": 1
+    },
+    "technical": {
+      "model": "llama2",
+      "threshold": 0.5,
+      "min_complexity": 10,
+      "resource_intensity": 3
+    },
+    "analytical": {
+      "model": "codeqwen",
+      "threshold": 0.6,
+      "min_complexity": 15,
+      "resource_intensity": 5
+    }
+  },
+  "logging": {
+    "directory": "./logs",
+    "level": "INFO"
+  },
+  "cache": {
+    "directory": "./cache",
+    "ttl_hours": 24
+  },
+  "monitoring": {
+    "interval": 60
+  },
+  "azure": {
+    "enabled": true,
+    "storage_connection_string": "${AZURE_STORAGE_CONNECTION_STRING}",
+    "anomaly_endpoint": "${ANOMALY_DETECTOR_ENDPOINT}",
+    "anomaly_key": "${ANOMALY_DETECTOR_KEY}",
+    "log_analytics_workspace_id": "${LOG_ANALYTICS_WORKSPACE_ID}"
+  },
+  "ms365": {
+    "enabled": true,
+    "client_id": "${MS365_CLIENT_ID}",
+    "client_secret": "${MS365_CLIENT_SECRET}",
+    "tenant_id": "${MS365_TENANT_ID}"
+  }
+}
